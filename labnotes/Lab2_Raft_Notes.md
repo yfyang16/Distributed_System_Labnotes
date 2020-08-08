@@ -11,15 +11,7 @@ In order to implement a replicated state machine protocol, there should be a `le
 
 <b>The three possible states are `leader`, `follower` and `candidate`. The three main tasks in Raft system are leader election, log replication and persistency.</b>
 
-
-```
-sequenceDiagram
-Follower->>Candidate: ElectionTimeout
-Candidate->>Candidate: ElectionTimeout
-Candidate->>Leader: Receive votes from majority
-Candidate->>Follower: Discover new leader or term
-Leader->>Follower: Discover higher term
-```
+![image](https://github.com/yyf710670079/Distributed_System_Labnotes/blob/master/images/states.png)
 
 #### 1. Leader Election
 Leaders send periodic heartbeats (AppendEntries RPCs that carry no log entries) to all followers in order to maintain their authority. If a follower receives no communication over a period of time called the election timeout, then it assumes there is no viable leader and begins an election to choose a new leader.
@@ -235,6 +227,8 @@ func (rf *Raft) UpdateCommit() {
 #### 3. Logs do not match
 - Check conditions of AppendEntries RPC
 - Logic is ok but rf.nextIndex[server]-- so slow (considering optimization)
-- The follower's uncommited logs should be deleted if they don't match the leaders'.
+- The follower's uncommited logs should be deleted if they don't match the leaders'
 - Heat beat timeout can be decreased (fast heart beat)
 - Every time the servers restart, it should check and load the local logs on the disk
+
+![image](https://github.com/yyf710670079/Distributed_System_Labnotes/blob/master/images/condensed_raft.png)
